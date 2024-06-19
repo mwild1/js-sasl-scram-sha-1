@@ -5,6 +5,21 @@ var RESP = {};
 var CLIENT_KEY = 'Client Key';
 var SERVER_KEY = 'Server Key';
 
+function base64decode(s) {
+    if (atob) {
+        return Uint8Array.from(atob(s), function(c) { return c.charCodeAt(0); });
+    } else {
+        return Uint8Array.from(Buffer.from(s, 'base64'));
+    }
+}
+
+function base64encode(s) {
+   if (btoa) {
+       return btoa(s);
+   } else {
+       return Buffer.from(s).toString('base64');
+   }
+}
 
 function Mechanism(options) {
     options = options || {};
@@ -27,7 +42,7 @@ Mechanism.prototype.response = function (cred) {
 Mechanism.prototype.challenge = function (chal) {
     var values = utils.parse(chal);
 
-    this._salt = new Buffer(values.s || '', 'base64');
+    this._salt = base64decode(values.s || '');
     this._iterationCount = parseInt(values.i, 10);
     this._nonce = values.r;
     this._verifier = values.v;
@@ -61,7 +76,7 @@ RESP.initial = function (mech, cred) {
 
 
 RESP.challenge = function (mech, cred) {
-    var gs2Header = new Buffer(mech._gs2Header).toString('base64');
+    var gs2Header = base64encode(mech._gs2Header);
 
     mech._clientFinalMessageWithoutProof = 'c=' + gs2Header + ',r=' + mech._nonce;
 
@@ -69,7 +84,7 @@ RESP.challenge = function (mech, cred) {
 
     // If our cached salt is the same, we can reuse cached credentials to speed
     // up the hashing process.
-    if (cred.salt && Buffer.compare(cred.salt, mech._salt) === 0) {
+    if (cred.salt && cred.salt.every(function(value, index) { return value === mech._salt[index]; })) {
         if (cred.clientKey && cred.serverKey) {
             clientKey = cred.clientKey;
             serverKey = cred.serverKey;
@@ -90,7 +105,7 @@ RESP.challenge = function (mech, cred) {
                       mech._clientFinalMessageWithoutProof;
     var clientSignature = bitops.HMAC(storedKey, authMessage);
 
-    var clientProof = bitops.XOR(clientKey, clientSignature).toString('base64');
+    var clientProof = base64encode(String.fromCharCode.apply(null, bitops.XOR(clientKey, clientSignature)));
 
     mech._serverSignature = bitops.HMAC(serverKey, authMessage);
 

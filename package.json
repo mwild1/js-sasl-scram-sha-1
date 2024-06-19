@@ -1,7 +1,7 @@
 {
   "name": "sasl-scram-sha-1",
   "description": "JavaScript implementation of SCRAM-SHA-1 SASL mechanism.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": {
     "name": "Lance Stout",
     "email": "lance@andyet.net"
@@ -10,7 +10,6 @@
     "url": "http://github.com/legastero/js-sasl-scram-sha-1/issues"
   },
   "dependencies": {
-    "bitwise-xor": "0.0.0",
     "create-hash": "^1.1.0",
     "create-hmac": "^1.1.3",
     "randombytes": "^2.0.1"
