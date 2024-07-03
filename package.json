@@ -15,8 +15,8 @@
     "randombytes": "^2.0.1"
   },
   "devDependencies": {
-    "tape": "^2.13.3",
-    "precommit-hook": "^1.0.2"
+    "precommit-hook": "^1.0.2",
+    "tape": "^5.8.1"
   },
   "keywords": [
     "sasl",
