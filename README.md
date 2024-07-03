@@ -10,6 +10,10 @@
 This module is a JavaScript implementation of the SCRAM-SHA-1 SASL mechanism,
 which plugs into the [SASL](https://github.com/jaredhanson/js-sasl) framework.
 
+**July 2024:** This repository is a continuation of the development of the
+library, which was [archived by the original developer](https://github.com/legastero/js-sasl-scram-sha-1).
+Many thanks to Lance for the library and for helping with the transition.
+
 ## Installing
 
 ```sh
@@ -45,6 +49,7 @@ Currently missing features:
 
   - [Lance Stout](http://github.com/legastero)
   - [Jared Hanson](http://github.com/jaredhanson)
+  - [Stephen Paul Weber](https://github.com/singpolyma)
 
 ## License
 
@@ -52,3 +57,4 @@ Currently missing features:
 
 Copyright (c) 2013 Lance Stout <[http://github.com/legasteros/](http://github.com/legastero/)>
 Copyright (c) 2012 Jared Hanson <[http://jaredhanson.net/](http://jaredhanson.net/)>
+Copyright (c) 2024 Stephen Paul Weber <[https://singpolyma.net/](https://singpolyma.net/)>

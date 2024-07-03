@@ -7,7 +7,7 @@
     "email": "lance@andyet.net"
   },
   "bugs": {
-    "url": "http://github.com/legastero/js-sasl-scram-sha-1/issues"
+    "url": "http://github.com/mwild1/js-sasl-scram-sha-1/issues"
   },
   "dependencies": {
     "create-hash": "^1.1.0",
@@ -29,7 +29,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/legastero/js-sasl-scram-sha-1.git"
+    "url": "git://github.com/mwild1/js-sasl-scram-sha-1.git"
   },
   "scripts": {
     "test": "node test/index.js"
