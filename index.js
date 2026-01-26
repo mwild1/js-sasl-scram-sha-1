@@ -2,8 +2,8 @@ var bitops = require('./lib/bitops');
 var utils = require('./lib/utils');
 
 var RESP = {};
-var CLIENT_KEY = 'Client Key';
-var SERVER_KEY = 'Server Key';
+var CLIENT_KEY = new TextEncoder().encode('Client Key');
+var SERVER_KEY = new TextEncoder().encode('Server Key');
 
 function base64decode(s) {
     if (atob) {
@@ -75,7 +75,7 @@ RESP.initial = function (mech, cred) {
 };
 
 
-RESP.challenge = function (mech, cred) {
+RESP.challenge = async function (mech, cred) {
     var gs2Header = base64encode(mech._gs2Header);
 
     mech._clientFinalMessageWithoutProof = 'c=' + gs2Header + ',r=' + mech._nonce;
@@ -90,24 +90,24 @@ RESP.challenge = function (mech, cred) {
             serverKey = cred.serverKey;
         } else if (cred.saltedPassword) {
             saltedPassword = cred.saltedPassword;
-            clientKey = bitops.HMAC(saltedPassword, CLIENT_KEY);
-            serverKey = bitops.HMAC(saltedPassword, SERVER_KEY);
+            clientKey = await bitops.HMAC(saltedPassword, CLIENT_KEY);
+            serverKey = await bitops.HMAC(saltedPassword, SERVER_KEY);
         }
     } else {
-        saltedPassword = bitops.Hi(cred.password || '', mech._salt, mech._iterationCount);
-        clientKey = bitops.HMAC(saltedPassword, CLIENT_KEY);
-        serverKey = bitops.HMAC(saltedPassword, SERVER_KEY);
+        saltedPassword = await bitops.Hi(cred.password || '', mech._salt, mech._iterationCount);
+        clientKey = await bitops.HMAC(saltedPassword, CLIENT_KEY);
+        serverKey = await bitops.HMAC(saltedPassword, SERVER_KEY);
     }
 
-    var storedKey = bitops.H(clientKey);
-    var authMessage = mech._clientFirstMessageBare + ',' +
+    var storedKey = await bitops.H(clientKey);
+    var authMessage = new TextEncoder().encode(mech._clientFirstMessageBare + ',' +
                       mech._challenge + ',' +
-                      mech._clientFinalMessageWithoutProof;
-    var clientSignature = bitops.HMAC(storedKey, authMessage);
+                      mech._clientFinalMessageWithoutProof);
+    var clientSignature = await bitops.HMAC(storedKey, authMessage);
 
     var clientProof = base64encode(String.fromCharCode.apply(null, bitops.XOR(clientKey, clientSignature)));
 
-    mech._serverSignature = bitops.HMAC(serverKey, authMessage);
+    mech._serverSignature = await bitops.HMAC(serverKey, authMessage);
 
     var result = mech._clientFinalMessageWithoutProof + ',p=' + clientProof;
 
