@@ -15,5 +15,9 @@
   "newcap": true,
   "immed": true,
   "freeze": true,
-  "eqeqeq": true
+  "eqeqeq": true,
+  "esversion": 8,
+  "globals": {
+    "crypto": false
+  }
 }
